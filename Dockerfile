@@ -1,0 +1,12 @@
+FROM node:24-bookworm-slim
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev --no-audit --no-fund
+COPY src ./src
+COPY migrations ./migrations
+COPY public ./public
+ENV NODE_ENV=production
+USER node
+EXPOSE 3000
+CMD ["npm", "start"]
+
