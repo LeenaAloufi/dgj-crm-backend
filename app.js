@@ -33,7 +33,7 @@ import {
 import { createMember, setEnabled } from "./users.js";
 import { mountWorkspace } from "./workspace-api.js";
 
-const release = "dgj-workspace-20261008-r1";
+const release = "dgj-microsoft-links-20261008-r1";
 
 export function createApp({ config, pool, auth }) {
   const app = express();
@@ -153,7 +153,7 @@ export function createApp({ config, pool, auth }) {
   app.get("/api/me", (req, res) => res.json({ user: profile(req.crmUser) }));
   app.get("/api/team", async (req, res) => {
     const { rows } = await pool.query(
-      'SELECT m.user_id AS id,u.name,m.role FROM crm_members m JOIN "user" u ON u.id=m.user_id WHERE m.enabled=TRUE ORDER BY u.name',
+      'SELECT m.user_id AS id,u.name,u.email,m.role FROM crm_members m JOIN "user" u ON u.id=m.user_id WHERE m.enabled=TRUE ORDER BY u.name',
     );
     res.json({ users: rows });
   });
