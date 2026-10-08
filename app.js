@@ -33,6 +33,8 @@ import {
 import { createMember, setEnabled } from "./users.js";
 import { mountWorkspace } from "./workspace-api.js";
 
+const release = "dgj-workspace-20261008-r1";
+
 export function createApp({ config, pool, auth }) {
   const app = express();
   app.disable("x-powered-by");
@@ -54,11 +56,12 @@ export function createApp({ config, pool, auth }) {
     }),
   );
   app.get("/health", async (req, res) => {
+    res.set("Cache-Control", "no-store");
     try {
       await pool.query("SELECT 1");
-      res.json({ status: "ok" });
+      res.json({ status: "ok", release, workspaceApi: true });
     } catch {
-      res.status(503).json({ status: "unavailable" });
+      res.status(503).json({ status: "unavailable", release });
     }
   });
   app.use("/api", (req, res, next) => {
